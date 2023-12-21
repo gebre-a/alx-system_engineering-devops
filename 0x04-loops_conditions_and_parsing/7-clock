@@ -7,7 +7,7 @@ while [ $hour -lt 13 ]; do
       echo "Hour: $hour"
       n=1
       while [ $n -le 59 ]; do
-      	  echo "$i"
+      	  echo "$n"
 	  n=$((n+1))
       done
       hour=$((hour+1))
