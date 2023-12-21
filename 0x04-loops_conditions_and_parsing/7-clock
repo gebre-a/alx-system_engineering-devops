@@ -4,7 +4,7 @@
 time_in_houre=0
 
 while [ $time_in_houre -lt 13 ]; do
-      echo "time_in_Houre: $time_in_houre"
+      echo "Time_in_Houre: $time_in_houre"
       n=1
       while [ $n -le 59 ]; do
       	  echo "$n"
