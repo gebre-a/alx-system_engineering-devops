@@ -10,5 +10,5 @@ while [ $time_in_houre -lt 13 ]; do
       	  echo "$n"
 	  n=$((n+1))
       done
-      time_in_hour=$((time_in_hour+1))
+      time_in_houre=$((time_in_houre+1))
 done
