@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # Display the script's own PID
-echo "The PID of this script is $$"
+echo $$
 
