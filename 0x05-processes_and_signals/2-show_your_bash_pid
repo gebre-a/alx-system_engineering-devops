@@ -1,4 +1,4 @@
-#!/bin/bash
-# Display lines containing the word "bash" and get the PID
+#!/usr/bin/env bash
+# Displays lines containing the word bash.
 
-ps auxf | grep bash
+ps auxf |grep  bash
