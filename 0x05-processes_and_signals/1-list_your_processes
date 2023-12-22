@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# Display a list of currently running processes with hierarchy
+# Use ps to get process information
+ps -auxf
