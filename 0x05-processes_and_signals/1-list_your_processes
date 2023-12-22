@@ -1,5 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# Lists all the process in the system
 
-# Display a list of currently running processes with hierarchy
-# Use ps to get process information
 ps -auxf
