@@ -1,15 +1,16 @@
+#!/usr/bin/env bash
 global
 	log /dev/log	local0
 	log /dev/log	local1 notice
 	chroot /var/lib/haproxy
 	stats socket /run/haproxy/admin.sock mode 660 level admin expose-fd listeners
 	stats timeout 30s
-	maxconn 2048
-	tune.ssl.default-dh-param 2048
 	user haproxy
 	group haproxy
 	daemon
-
+	#ssl configuration
+	maxconn 2048
+	tune.ssl.default-dh-param 2048
 	# Default SSL material locations
 	ca-base /etc/ssl/certs
 	crt-base /etc/ssl/private
@@ -22,10 +23,10 @@ global
 defaults
 	log	global
 	mode	http
-	option forwardfor
-	option http-server-close
 	option	httplog
 	option	dontlognull
+    option forwardfor
+    option http-server-close
         timeout connect 5000
         timeout client  50000
         timeout server  50000
@@ -37,31 +38,32 @@ defaults
 	errorfile 503 /etc/haproxy/errors/503.http
 	errorfile 504 /etc/haproxy/errors/504.http
 
+listen 3akare
+	bind *:80
+	mode http
+	balance roundrobin
+	option http-server-close
+	option httpclose
+	option forwardfor
+	server 60374-web-01 35.175.126.203:80 check
+	server 60374-web-02 100.26.178.217:80 check
 
 frontend www-http
-#       	bind *:80
-        mode http
-        reqadd X-Forwarded-Proto:\ http
-        default_backend www-backend
+	bind *:80
+	reqadd x-Forwarded-Proto:\ http
+	default_backend www-backend
 
 frontend www-https
-	bind *:443 ssl crt /etc/haproxy/certs/www.labayifa.tech.pem
-        mode http
-        reqadd X-Forwarded-Proto:\ https
-        acl letsencrypt-acl path_beg /.well-known/acme-challenge/
+    	bind *:443 ssl crt /etc/haproxy/certs/3akare.tech.pem
+	reqadd X-Forwarded-Proto:\ https
+	acl letsencrypt-acl path_beg /.well-known/acme-challenge/
 	use_backend letsencrypt-backend if letsencrypt-acl
-        default_backend www-backend
-        
+	default_backend www-backend
+
 backend www-backend
-	mode http
-	http-request set-header X-Forwarded-For %[src]
-	balance roundrobin
 	redirect scheme https if !{ ssl_fc }
-        balance roundrobin
-        server 1990-web-01 100.26.175.1:80 check
-        server 1990-web-02 100.25.142.179:80 check
-        option httpchk
-        	
+	server 60374-web-01 35.175.126.203:80 check
+	server 60374-web-02 100.26.178.217:80 check
+
 backend letsencrypt-backend
-    mode http
-    server letsencrypt 127.0.0.1:80
+	server letsencrypt 127.0.0.1:54321
