@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# make the previous fix in task #0 short and sweet and lovely
+sudo sed -i "s/8080 default_server/80 default_server/g" /etc/nginx/sites-enabled/default
+sudo service nginx restart
+kill "$(pgrep 'nginx' | head -1)"
